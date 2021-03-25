@@ -127,7 +127,7 @@ function handleCardClick(evt) {
         // if the classes match, change background colors to match class
       } else if (firstCardClass === secondCardClass) {
         flipCard(firstCard.target);
-        flipCounter(secondCard.target);
+        flipCard(secondCard.target);
         matched.push(firstCard.target, secondCard.target);
         // if not a match, lock the game board so more clicks can't happen and unflip card after 1 sec
       } else {
