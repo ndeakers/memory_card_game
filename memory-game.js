@@ -32,24 +32,19 @@ function shuffle(items) {
   return items;
 }
 
-/** Create card for every color in colors (each will appear twice)
- *
- * Each div DOM element will have:
- * - a class with the value of the color
- * - an click listener for each card to handleCardClick
- */
-
 function createCards(colors) {
   const gameBoard = document.getElementById("game");
-
+  let card;
+  let cards = [];
   for (let color of colors) {
-    let card = document.createElement('div');
+    card = document.createElement('div');
+    cards.push(card);
     card.className = color;
     card.style.backgroundColor = 'white';
     gameBoard.appendChild(card);
     document.addEventListener('click', handleCardClick);
-    resetButton(card);
   }
+  resetButton(cards);
 };
 
 /** Flip a card face-up. */
@@ -66,17 +61,21 @@ function unFlipCard(card) {
     return card;
   }
 }
-
+// assigns first card
 function assignFirstCard(evt) {
-  hasChosenCard = true;
-  firstCard = evt;
-  firstCardClass = evt.target.className;
+  if (COLORS.includes(evt.target.className)) {
+    hasChosenCard = true;
+    firstCard = evt;
+    firstCardClass = evt.target.className;
+  }
 }
 // assigns second cad and 
 function assignSecondCard(evt) {
-  hasChosenCard = false;
-  secondCard = evt;
-  secondCardClass = evt.target.className;
+  if (COLORS.includes(evt.target.className)) {
+    hasChosenCard = false;
+    secondCard = evt;
+    secondCardClass = evt.target.className;
+  }
 }
 
 
@@ -102,12 +101,12 @@ function handleCardClick(evt) {
     if (firstCard.target === secondCard.target) {
       unFlipCard(firstCard.target);
       unFlipCard(secondCard.target);
-      // if the classes match, change background color to match class and different cards
+      // if the classes match, change background colors to match class
     } else if (firstCardClass === secondCardClass) {
       firstCard.target.backgroundColor = firstCardClass;
       secondCard.target.backgroundColor = secondCardClass;
       // if not a match, lock the game board so more clicks can't happen and unflip card after 1 sec
-    } else if (firstCard.target !== secondCard.target) {
+    } else {
       lock = true;
       setTimeout(function () {
         unFlipCard(firstCard.target);
@@ -118,8 +117,13 @@ function handleCardClick(evt) {
   }
 }
 
-function resetButton() {
+function resetButton(array) {
   let button = document.querySelector('button');
   button.addEventListener('click', function () {
+    let shuffled = shuffle(COLORS);
+    for (let i = 0; i < array.length; i++) {
+      array[i].style.backgroundColor = 'white';
+      array[i].className = shuffled[i];
+    }
   })
 }
