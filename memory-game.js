@@ -8,11 +8,9 @@ const COLORS = [
   "red", "blue", "green", "orange", "purple",
 ];
 
-
 const colors = shuffle(COLORS);
 
 createCards(colors);
-
 
 /** Shuffle array items in-place and return shuffled array. */
 
@@ -78,52 +76,70 @@ function assignSecondCard(evt) {
   }
 }
 
+// button shuffles the cards classes and unflips cards. resets matched array
+function resetButton(array) {
+  let button = document.querySelector('button');
+  button.addEventListener('click', function () {
+    let shuffled = shuffle(COLORS);
+    count = 0;
+    document.querySelector('#flip').innerHTML = 'Flips: 0'
+    for (let i = 0; i < array.length; i++) {
+      unFlipCard(array[i]);
+      array[i].className = shuffled[i];
+      matched = [];
+    }
+  })
 
+}
+
+function flipCounter() {
+  let counter = document.querySelector('#flip');
+  count++;
+  counter.innerHTML = "Flips: " + count;
+}
+
+let count = 0;
 let hasChosenCard = false;
 let firstCard;
 let firstCardClass;
 let secondCard;
 let secondCardClass;
 let lock = false;
+let matched = [];
 
 function handleCardClick(evt) {
-  if (lock || evt.target.className === 'game') {
+  // don't fire if clicking game div, clicking a matched pair, or the reset button
+  if (lock || evt.target.className === 'game' || matched.includes(evt.target) || evt.target.className === 'reset') {
     return;
   }
-  flipCard(evt.target);
-
-  // if click on two diff cards and color is the same stay face up
-  if (!hasChosenCard) {
-    assignFirstCard(evt);
-  } else {
-    assignSecondCard(evt);
-    // if double click same card. unflip the card
-    if (firstCard.target === secondCard.target) {
-      unFlipCard(firstCard.target);
-      unFlipCard(secondCard.target);
-      // if the classes match, change background colors to match class
-    } else if (firstCardClass === secondCardClass) {
-      firstCard.target.backgroundColor = firstCardClass;
-      secondCard.target.backgroundColor = secondCardClass;
-      // if not a match, lock the game board so more clicks can't happen and unflip card after 1 sec
+  // if clicking on a valid card
+  if (COLORS.includes(evt.target.className)) {
+    flipCard(evt.target);
+    flipCounter();
+    // if click on two diff cards and color is the same stay face up
+    if (!hasChosenCard) {
+      assignFirstCard(evt);
     } else {
-      lock = true;
-      setTimeout(function () {
-        unFlipCard(firstCard.target);
+      assignSecondCard(evt);
+      // if double click same card. unflip the card
+      if (firstCard.target === secondCard.target) {
         unFlipCard(secondCard.target);
-        lock = false;
-      }, 1000);
+        // if the classes match, change background colors to match class
+      } else if (firstCardClass === secondCardClass) {
+        flipCard(firstCard.target);
+        flipCounter(secondCard.target);
+        matched.push(firstCard.target, secondCard.target);
+        // if not a match, lock the game board so more clicks can't happen and unflip card after 1 sec
+      } else {
+        lock = true;
+        setTimeout(function () {
+          unFlipCard(firstCard.target);
+          unFlipCard(secondCard.target);
+          lock = false;
+        }, 1000);
+      }
     }
   }
 }
 
-function resetButton(array) {
-  let button = document.querySelector('button');
-  button.addEventListener('click', function () {
-    let shuffled = shuffle(COLORS);
-    for (let i = 0; i < array.length; i++) {
-      array[i].style.backgroundColor = 'white';
-      array[i].className = shuffled[i];
-    }
-  })
-}
+
