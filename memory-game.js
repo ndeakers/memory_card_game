@@ -1,8 +1,5 @@
-// "use strict";
 
 /** Memory game: find matching pairs of cards and flip both of them. */
-
-const FOUND_MATCH_WAIT_MSECS = 1000;
 const COLORS = [
   "red", "blue", "green", "orange", "purple",
   "red", "blue", "green", "orange", "purple",
@@ -15,18 +12,12 @@ createCards(colors);
 /** Shuffle array items in-place and return shuffled array. */
 
 function shuffle(items) {
-  // This algorithm does a "perfect shuffle", where there won't be any
-  // statistical bias in the shuffle (many naive attempts to shuffle end up not
-  // be a fair shuffle). This is called the Fisher-Yates shuffle algorithm; if
-  // you're interested, you can learn about it, but it's not important.
-
   for (let i = items.length - 1; i > 0; i--) {
     // generate a random index between 0 and i
     let j = Math.floor(Math.random() * i);
     // swap item at i <-> item at j
     [items[i], items[j]] = [items[j], items[i]];
   }
-
   return items;
 }
 
@@ -52,14 +43,13 @@ function flipCard(card) {
 }
 
 /** Flip a card face-down. */
-
 function unFlipCard(card) {
   if (COLORS.includes(card.className)) {
     card.style.backgroundColor = 'white';
     return card;
   }
 }
-// assigns first card
+// assigns first card and class
 function assignFirstCard(evt) {
   if (COLORS.includes(evt.target.className)) {
     hasChosenCard = true;
@@ -67,7 +57,7 @@ function assignFirstCard(evt) {
     firstCardClass = evt.target.className;
   }
 }
-// assigns second cad and 
+// assigns second card and class 
 function assignSecondCard(evt) {
   if (COLORS.includes(evt.target.className)) {
     hasChosenCard = false;
@@ -82,16 +72,15 @@ function resetButton(array) {
   button.addEventListener('click', function () {
     let shuffled = shuffle(COLORS);
     count = 0;
+    matched = [];
     document.querySelector('#flip').innerHTML = 'Flips: 0'
     for (let i = 0; i < array.length; i++) {
       unFlipCard(array[i]);
       array[i].className = shuffled[i];
-      matched = [];
     }
-  })
-
+  });
 }
-
+// updates flip counter
 function flipCounter() {
   let counter = document.querySelector('#flip');
   count++;
