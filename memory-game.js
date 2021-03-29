@@ -20,7 +20,7 @@ function shuffle(items) {
   }
   return items;
 }
-
+// creates cards, sets background color and classname, handles click event and reset button
 function createCards(colors) {
   const gameBoard = document.getElementById("game");
   let card;
@@ -113,7 +113,7 @@ function handleCardClick(evt) {
       // if double click same card. unflip the card
       if (firstCard.target === secondCard.target) {
         unFlipCard(secondCard.target);
-        // if the classes match, change background colors to match class
+        // if the classes match, change background colors to match class. add matched colors to array
       } else if (firstCardClass === secondCardClass) {
         flipCard(firstCard.target);
         flipCard(secondCard.target);
