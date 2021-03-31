@@ -71,6 +71,11 @@ function resetButton(array) {
   let button = document.querySelector('button');
   button.addEventListener('click', function () {
     let shuffled = shuffle(COLORS);
+    let best = document.getElementById('best_count');
+    if (Number(best_count.innerText) > count && matched.length === 10) {
+      best.innerText = count.toString();
+      best.removeAttribute('hidden');
+    }
     count = 0;
     matched = [];
     document.querySelector('#flip').innerHTML = 'Flips: 0'
@@ -84,7 +89,7 @@ function resetButton(array) {
 function flipCounter() {
   let counter = document.querySelector('#flip');
   count++;
-  counter.innerHTML = "Flips: " + count;
+  counter.innerText = "Flips: " + count;
 }
 
 let count = 0;

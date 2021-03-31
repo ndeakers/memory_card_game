@@ -16,7 +16,10 @@
   <p>Click a card to view it's color</p>
 
   <p>Match every card with it's pair</p>
-  <p id="flip">Flips: 0</p>
+  <div id="score_container">
+    <div id="flip" class="score">Flips: 0</div>
+    <div class="score">Best Score: <span id="best_count" hidden>100</span></div>
+  </div>
   <button class="reset">Reset</button>
 
   <div id="game" class="game"></div>
